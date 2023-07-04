@@ -1,0 +1,13 @@
+txt
+ha-mqtt-discoverable
+paho-mqtt
+RPi.bme280
+smbus2
+thelogrus
+PyYAML
+dateutils
+pytz
+python-dateutil
+six
+pydantic
+pydantic-yaml
