@@ -85,3 +85,7 @@ Example:
 <p><strong><em>door.button_pin - </em></strong>the number of the pin used for the button (GPIO numbering)<br></p>
 <p><strong><em>door.closed_contact_pin - </em></strong>the number of the pin used for the closed contact (GPIO numbering)<br></p>
 <p><strong><em>door.opened_contact_pin - </em></strong>the number of the pin used for the opened contact (GPIO numbering)<br></p>
+
+## Uses ha-mqtt-discoverable
+
+- [ha-mqtt-discoverable-cli](https://github.com/unixorn/ha-mqtt-discoverable-cli) 
