@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "discoverable-garage-door"
+version = "0.0.1"
+description = "Home Assistant MQTT discoverable garage door"
+license = "Apache-2.0"
+authors = ["Tim Daley <timdaley@earthling.net>"]
+maintainers = ["Tim Daley <timdaley@earthling.net>"]
+readme = "README.md"
+repository = "Rhttps://github.com/AixNPanes/discoverable-garage-door"
+packages = [{include = "."}]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0,<4.0"
+pyaml = "^21.10.1"
+paho-mqtt = "^1.6.1"
+gitlike-commands = "^0.2.1"
+thelogrus = "^0.7.0"
+pydantic = "^1.10.5"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+pytest = "^7.2.2"
+flake8 = "^6.0.0"
+pre-commit = "^3.1.1"
+
+
+[tool.poetry.group.test.dependencies]
+pytest-mock = "^3.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
