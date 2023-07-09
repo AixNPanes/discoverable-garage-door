@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 import logging.config
-from typing import  Optional
+from typing import Optional
 from .util import logger
 
 from ha_mqtt_discoverable import (
@@ -29,8 +29,10 @@ mqtt:
       device_class: "restart"
 """
 
+
 class CoverInfo(EntityInfo):
     """Specific information for cover"""
+
     component: str = "cover"
     enabled_by_default: Optional[bool] = True
     name: str = "My Garage Door"
@@ -53,10 +55,12 @@ class CoverInfo(EntityInfo):
     retain: Optional[bool] = None
     """If the published message should have the retain flag on or not"""
 
+
 class Cover(Subscriber[CoverInfo]):
     """Implements an MQTT button:
     https://www.home-assistant.io/integrations/cover.mqtt
     """
+
     def open(self):
         self._send_action(state=self._entity.payload_open)
 
@@ -67,12 +71,15 @@ class Cover(Subscriber[CoverInfo]):
         self._send_action(state=self._entity.payload_stop)
 
     def _send_action(self, state: str) -> None:
-        if state in [self._entity.payload_open,
-                self._entity.payload_close,
-                self._entity.payload_stop]:
+        if state in [
+            self._entity.payload_open,
+            self._entity.payload_close,
+            self._entity.payload_stop,
+        ]:
             state_message = state
             logger.info(
-                f'Sending {state_message} command to {self._entity.name} using {self.state_topic}')
+                f"Sending {state_message} command to {self._entity.name} using {self.state_topic}"
+            )
             self._state_helper(state=state_message)
 
     def _update_state(self, state) -> None:
@@ -83,8 +90,9 @@ class Cover(Subscriber[CoverInfo]):
         logging.info(f"Received {cover_payload} from HA")
 
     @staticmethod
-    def cover(mqtt:Settings.MQTT, gpio_config:Config.GPIO, \
-            door_config:Config.GPIO.Door) -> Cover:
+    def cover(
+        mqtt: Settings.MQTT, gpio_config: Config.GPIO, door_config: Config.GPIO.Door
+    ) -> Cover:
         cover_info = CoverInfo(name=door_config.name, device_class="garage")
         cover_settings = Settings(mqtt=mqtt, entity=cover_info)
         cover = Cover(cover_settings, command_callback=Cover.cover_callback)
