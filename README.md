@@ -19,6 +19,10 @@ A python 3 module that takes advantage of Home Assistant's MQTT discovery protoc
 - [Usage](#usage)
 - [Configuration](#configuration)
   - [Format](#format)
+- [Version History](#version-history)
+  - [Version 0.1.1 - Complete build config](#version-011---complete-build-config)
+  - [Version 0.1.2 - Add Lovelace UI exampe](#version-012---add-lovelace-ui-exampe)
+- [Uses ha-mqtt-discoverable](#uses-ha-mqtt-discoverable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Requirements
@@ -85,6 +89,12 @@ Example:
 <p><strong><em>door.button_pin - </em></strong>the number of the pin used for the button (GPIO numbering)<br></p>
 <p><strong><em>door.closed_contact_pin - </em></strong>the number of the pin used for the closed contact (GPIO numbering)<br></p>
 <p><strong><em>door.opened_contact_pin - </em></strong>the number of the pin used for the opened contact (GPIO numbering)<br></p>
+
+## Version History
+
+### Version 0.1.1 - Complete build config
+
+### Version 0.1.2 - Add Lovelace UI exampe
 
 ## Uses ha-mqtt-discoverable
 

@@ -4,15 +4,11 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
 
-- [Requirements](#requirements)
-  - [Raspberry PI](#raspberry-pi)
-  - [Debian](#debian)
-  - [Python](#python)
-- [Installing](#installing)
-  - [installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-  - [Format](#format)
+- [Prerequisites](#prerequisites)
+  - [Install the module if you haven't already](#install-the-module-if-you-havent-already)
+  - [Run the module](#run-the-module)
+  - [Create a button helper](#create-a-button-helper)
+  - [Create your Button](#create-your-button)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
