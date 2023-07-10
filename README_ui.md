@@ -34,16 +34,15 @@ python3.11 -m discoverable-garage-door
     - If you're using docker to run home assistant:
       - sudo docker exec -it `sudo docker ps|grep 'homeassistant:'|cut -d' ' -f1  -` bash
       - vi
-    -
-  - open the configuration.yaml file in the /config folder
-  - add the following to the configuration.yaml in the /config folder:
+- open the configuration.yaml file in the /config folder
+- add the following to the configuration.yaml in the /config folder:
 
         input_button:
           garage_door_opener:
             name: My Garage Door
 
-  - If there is no input_button: in the existing system configuration.yaml, just add the new data to the bottom
-  - If there is an existing input_button: add the configuration.yaml from the examples folder to the system's configuration.yaml after the last part of the existing input_select: statement, but delete the input_select: statement from the data you just added. There should only be a single input_select: statement in the resulting system configuration.yaml
+- If there is no input_button: in the existing system configuration.yaml, just add the new data to the bottom
+- If there is an existing input_button: add the configuration.yaml from the examples folder to the system's configuration.yaml after the last part of the existing input_select: statement, but delete the input_select: statement from the data you just added. There should only be a single input_select: statement in the resulting system configuration.yaml
 - Enable your changes by clicking Developer Tools->YAML->Check Configuration. If you get Configuration will not prevent Home Assistant from starting! everything's OK. If you get an error or it seems to take a long time, fix it before you continue. Notifications or logs (use the editor like above) may help.
 - Click RESTART, then Quick Restart
 - Click Settings->Helpers. Your Input Button should appear as a helper.
