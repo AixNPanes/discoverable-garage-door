@@ -34,6 +34,7 @@ python3.11 -m discoverable-garage-door
     - If you're using docker to run home assistant:
       - sudo docker exec -it `sudo docker ps|grep 'homeassistant:'|cut -d' ' -f1  -` bash
       - vi
+    -
   - open the configuration.yaml file in the /config folder
   - add the following to the configuration.yaml in the /config folder:
 
