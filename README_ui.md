@@ -37,9 +37,9 @@ python3.11 -m discoverable-garage-door
   - open the configuration.yaml file in the /config folder
   - add the following to the configuration.yaml in the /config folder:
 
-    input_button:
-      garage_door_opener:
-        name: My Garage Door
+        input_button:
+          garage_door_opener:
+            name: My Garage Door
 
   - If there is no input_button: in the existing system configuration.yaml, just add the new data to the bottom
   - If there is an existing input_button: add the configuration.yaml from the examples folder to the system's configuration.yaml after the last part of the existing input_select: statement, but delete the input_select: statement from the data you just added. There should only be a single input_select: statement in the resulting system configuration.yaml
