@@ -96,6 +96,8 @@ Example:
 
 ### Version 0.1.2 - Add Lovelace UI exampe
 
+### Version 0.1.3 - Rename logger.conf
+
 ## Uses ha-mqtt-discoverable
 
 - [ha-mqtt-discoverable-cli](https://github.com/unixorn/ha-mqtt-discoverable-cli) 
