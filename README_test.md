@@ -43,13 +43,14 @@
 ```
 - discoverable-garage-door
   - install to ~/.local/lib
-
+```
     python3.11 pip install discoverable-garage-door
-
+```
   - install to /usr/local/lib/python3.11/site-packages/
-
+```
     sudo python3.11 pip install discoverable-garage-door
-
+```
 ## Test
-
-python3.11 -m discoverable_garage_door
+```
+    python3.11 -m discoverable_garage_door
+```
