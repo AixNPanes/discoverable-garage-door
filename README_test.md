@@ -4,11 +4,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
-  - [Install the module if you haven't already](#install-the-module-if-you-havent-already)
-  - [Run the module](#run-the-module)
-  - [Create a button helper](#create-a-button-helper)
-  - [Create your Button](#create-your-button)
+- [Hardware](#hardware)
+- [Connections](#connections)
+- [Software](#software)
+- [Test](#test)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
