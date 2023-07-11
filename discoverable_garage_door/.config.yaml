@@ -10,7 +10,7 @@ gpio:
   contact_bounce_time_ms: 200
   contact_pullup: true
   doors:
-    - button_pin: 18
+    - button_pin: 22
       closed_contact_pin: 27
       name: main garage door
       opened_contact_pin: 17

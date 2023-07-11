@@ -98,6 +98,8 @@ Example:
 
 ### Version 0.1.3 - Rename logger.conf
 
+### Version 0.1.4 - Get test bed operating
+
 ## Uses ha-mqtt-discoverable
 
 - [ha-mqtt-discoverable-cli](https://github.com/unixorn/ha-mqtt-discoverable-cli) 

@@ -64,7 +64,6 @@ class Config(YamlModel):
                     config = Config._readfile(config_file)
                 else:
                     config = Config()
-        print(config)
         if len(config.gpio.doors) == 0:
             config.gpio.doors.append(Door())
         return config

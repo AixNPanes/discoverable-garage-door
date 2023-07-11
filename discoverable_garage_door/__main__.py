@@ -9,8 +9,6 @@ from ha_mqtt_discoverable import Settings, __version__
 from discoverable_garage_door.config import Config, config
 from discoverable_garage_door.cover import CoverInfo, Cover, Settings
 
-print(__version__)
-sys.exit(0)
 mqtt_settings = Settings.MQTT(
     host=config.mqtt_broker.host,
     username=config.mqtt_broker.username,
