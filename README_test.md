@@ -24,7 +24,7 @@
 
 ## Connections
 
-![image info](./images/testbed.png)
+![image info](./images/TestBed.png)
 
 ## Software
 
