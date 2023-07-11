@@ -30,6 +30,7 @@
 
 - Raspian OS (Debian Bullseye or newer)
 - Python 3.11 (Currently only install-from-source is available), go to https://www.python.org/downloads/ to the most current version and use that in the following export
+
     export VERSION=3.11.4
     sudo apt-get update
     sudo apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
@@ -39,10 +40,14 @@
     cd Python-${VERSION}
     ./configure --enable-optimizations
     sudo make altinstall
+
 - discoverable-garage-door
   - install to ~/.local/lib
+
     python3.11 pip install discoverable-garage-door
+
   - install to /usr/local/lib/python3.11/site-packages/
+
     sudo python3.11 pip install discoverable-garage-door
 
 ## Test
