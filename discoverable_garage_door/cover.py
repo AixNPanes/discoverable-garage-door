@@ -12,7 +12,8 @@ from ha_mqtt_discoverable import (
     Settings,
 )
 from .config import Config
-from .door import Door
+from .button import Button
+from .contact import Contact
 
 """
 # Example configuration.yaml entry
@@ -56,53 +57,92 @@ class CoverInfo(EntityInfo):
     retain: Optional[bool] = None
     """If the published message should have the retain flag on or not"""
 
-
+contacts = {}
 class Cover(Subscriber[CoverInfo]):
     """Implements an MQTT button:
     https://www.home-assistant.io/integrations/cover.mqtt
     """
+    global contacts
 
-    def open(self):
-        self._send_action(state=self._entity.payload_open)
+    def __init__(cls, mqtt: Settings.MQTT, gpio_config: Config.GPIO, door_config: Config.GPIO.Door):
+        cover_info = CoverInfo(name=door_config.name, device_class="garage")
+        cover_settings = Settings(mqtt=mqtt, entity=cover_info)
+        button = Button(door_config, gpio_config)
+        opened_contact = Contact(door_config.opened_contact_pin, \
+                gpio_config)
+        opened_contact.addEventHandler(Cover.opened_contact_callback)
+        closed_contact = Contact(door_config.closed_contact_pin, \
+                gpio_config)
+        closed_contact.addEventHandler(Cover.closed_contact_callback)
+        super().__init__( \
+                cover_settings, \
+                command_callback=Cover.cover_callback, \
+                user_data=button)
+        cls.cover_info = cover_info
+        cls.cover_settings = cover_settings
+        cls.button = button
+        cls.opened_contact = opened_contact
+        cls.closed_contact = closed_contact
+        cls.open()
+        contacts[door_config.opened_contact_pin] = opened_contact
+        contacts[door_config.closed_contact_pin] = closed_contact
 
-    def close(self):
-        self._send_action(state=self._entity.payload_close)
+    def open(cls):
+        cls._send_action(state=cls._entity.payload_open)
 
-    def stop(self):
-        self._send_action(state=self._entity.payload_stop)
+    def close(cls):
+        cls._send_action(state=cls._entity.payload_close)
 
-    def _send_action(self, state: str) -> None:
+    def stop(cls):
+        cls._send_action(state=cls._entity.payload_stop)
+
+    def _send_action(cls, state: str) -> None:
         if state in [
-            self._entity.payload_open,
-            self._entity.payload_close,
-            self._entity.payload_stop,
+            cls._entity.payload_open,
+            cls._entity.payload_close,
+            cls._entity.payload_stop,
         ]:
             state_message = state
             logger.info(
-                f"Sending {state_message} command to {self._entity.name} using {self.state_topic}"
+                f"Sending {state_message} command to {cls._entity.name} using {cls.state_topic}"
             )
-            self._state_helper(state=state_message)
+            cls._state_helper(state=state_message)
 
-    def _update_state(self, state) -> None:
+    def _update_state(cls, state) -> None:
         raise Error()
 
+    def cleanup(cls):
+        button.cleanup()
+        opened_contact.cleanup()
+        closed_contact.cleanup()
+
+    @staticmethod
+    def get_contact(pin:int) -> Contact:
+        contact = contacts[pin]
+        if contact != None:
+            return contact
+        raise Exception
+
+    @staticmethod
+    def opened_contact_callback(pin:int):
+        contact = contacts[pin]
+        logger.debug(f'opened contact pulsed: {contact}')
+        state = contact.input()
+        logger.debug(f'state: {state}')
+
+    @staticmethod
+    def closed_contact_callback(pin:int):
+        contact = contacts[pin]
+        logger.debug(f'closed contact pulsed: {contact}')
+        state = contact.input()
+        logger.debug(f'state: {state}')
+
+    @staticmethod
     def cover_callback(client: Client, user_data, message: MQTTMessage):
         cover_payload = message.payload.decode()
         logging.info(f"Received {cover_payload} from HA with {user_data}")
-        user_data.pushButton()
+        user_data.pushButtonFor()
 
     @staticmethod
-    def cover(
-        mqtt: Settings.MQTT, gpio_config: Config.GPIO, door_config: Config.GPIO.Door
-    ) -> Cover:
-        cover_info = CoverInfo(name=door_config.name, device_class="garage")
-        cover_settings = Settings(mqtt=mqtt, entity=cover_info)
-        door = Door(gpio_config.button_push_duration_ms, \
-                gpio_config.contact_pullup, \
-                door_config)
-        cover = Cover( \
-                cover_settings, \
-                command_callback=Cover.cover_callback, \
-                user_data=door)
-        cover.open()
-        return cover
+    def cover(mqtt: Settings.MQTT, gpio_config: Config.GPIO, door_config: Config.GPIO.Door) -> Cover:
+        return Cover(mqtt, gpio_config, door_config)
