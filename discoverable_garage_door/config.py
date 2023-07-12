@@ -19,7 +19,7 @@ class MQTT(BaseModel):
     state_prefix: str = "hmd"
 
 
-class Door(BaseModel):
+class DoorInfo(BaseModel):
     name: str = "My Door"
     button_pin: int = 18
     opened_contact_pin: int = 27
@@ -30,7 +30,7 @@ class GPIO(BaseModel):
     button_push_duration_ms: int = 500
     contact_bounce_time_ms: int = 200
     contact_pullup: bool = True
-    doors: list["Door"] = []
+    doors: list["DoorInfo"] = []
 
 
 class Config(YamlModel):
@@ -65,7 +65,7 @@ class Config(YamlModel):
                 else:
                     config = Config()
         if len(config.gpio.doors) == 0:
-            config.gpio.doors.append(Door())
+            config.gpio.doors.append(DoorInfo())
         return config
 
     @staticmethod
