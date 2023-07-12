@@ -22,6 +22,8 @@ A python 3 module that takes advantage of Home Assistant's MQTT discovery protoc
 - [Version History](#version-history)
   - [Version 0.1.1 - Complete build config](#version-011---complete-build-config)
   - [Version 0.1.2 - Add Lovelace UI exampe](#version-012---add-lovelace-ui-exampe)
+  - [Version 0.1.3 - Rename logger.conf](#version-013---rename-loggerconf)
+  - [Version 0.1.4 - Get test bed operating](#version-014---get-test-bed-operating)
 - [Uses ha-mqtt-discoverable](#uses-ha-mqtt-discoverable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -97,6 +99,8 @@ Example:
 ### Version 0.1.2 - Add Lovelace UI exampe
 
 ### Version 0.1.3 - Rename logger.conf
+
+### Version 0.1.4 - Get test bed operating
 
 ## Uses ha-mqtt-discoverable
 

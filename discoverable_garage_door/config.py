@@ -19,23 +19,23 @@ class MQTT(BaseModel):
     state_prefix: str = "hmd"
 
 
-class Door(BaseModel):
+class DoorInfo(BaseModel):
     name: str = "My Door"
     button_pin: int = 18
     opened_contact_pin: int = 27
     closed_contact_pin: int = 17
 
 
-class GPIO(BaseModel):
+class GpioInfo(BaseModel):
     button_push_duration_ms: int = 500
     contact_bounce_time_ms: int = 200
     contact_pullup: bool = True
-    doors: list["Door"] = []
+    doors: list["DoorInfo"] = []
 
 
 class Config(YamlModel):
     mqtt_broker: MQTT = MQTT()
-    gpio: GPIO = GPIO()
+    gpio: GpioInfo = GpioInfo()
 
     @staticmethod
     def _readfile(filepath) -> Config:
@@ -64,9 +64,8 @@ class Config(YamlModel):
                     config = Config._readfile(config_file)
                 else:
                     config = Config()
-        print(config)
         if len(config.gpio.doors) == 0:
-            config.gpio.doors.append(Door())
+            config.gpio.doors.append(DoorInfo())
         return config
 
     @staticmethod
