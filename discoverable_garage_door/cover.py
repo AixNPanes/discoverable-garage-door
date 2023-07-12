@@ -1,4 +1,6 @@
 from __future__ import annotations
+from enum import Enum
+import json
 import logging
 import logging.config
 from typing import Optional
@@ -31,6 +33,11 @@ mqtt:
       device_class: "restart"
 """
 
+class CoverState(Enum):
+    OPENING = "opening"
+    OPEN = "open"
+    CLOSING = "closing"
+    CLOSED = "closed"
 
 class CoverInfo(EntityInfo):
     """Specific information for cover"""
@@ -41,6 +48,7 @@ class CoverInfo(EntityInfo):
     object_id: Optional[str] = "my-garage-door-"
     unique_id: Optional[str] = "abc-cba"
     device_class: Optional[str] = "garage"
+    value:str = CoverState.OPEN.name
 
     payload_open: str = "open"
     """The payload to send to trigger the open action."""
@@ -76,16 +84,20 @@ class Cover(Subscriber[CoverInfo]):
         closed_contact.addEventHandler(Cover.closed_contact_callback)
         super().__init__( \
                 cover_settings, \
-                command_callback=Cover.cover_callback, \
+                command_callback=Cover.cover_button_callback, \
                 user_data=button)
         cls.cover_info = cover_info
         cls.cover_settings = cover_settings
         cls.button = button
         cls.opened_contact = opened_contact
         cls.closed_contact = closed_contact
+        opened_contact.input()
+        closed_contact.input()
         cls.open()
-        contacts[door_config.opened_contact_pin] = opened_contact
-        contacts[door_config.closed_contact_pin] = closed_contact
+        contacts[door_config.opened_contact_pin] = (cls, opened_contact)
+        contacts[door_config.closed_contact_pin] = (cls, closed_contact)
+        cls.state = CoverState.OPEN
+        cls.post_value_if_changed()
 
     def open(cls):
         cls._send_action(state=cls._entity.payload_open)
@@ -113,32 +125,52 @@ class Cover(Subscriber[CoverInfo]):
 
     def cleanup(cls):
         button.cleanup()
-        opened_contact.cleanup()
-        closed_contact.cleanup()
+        cls.opened_contact.cleanup()
+        cls.closed_contact.cleanup()
 
-    @staticmethod
-    def get_contact(pin:int) -> Contact:
-        contact = contacts[pin]
-        if contact != None:
-            return contact
-        raise Exception
+    def post_value_if_changed(cls):
+        if cls.opened_contact.value == cls.closed_contact.value:
+            new_state = CoverState.OPENING
+        elif cls.opened_contact.value:
+            new_state = CoverState.OPEN
+        else:
+            new_state = CoverState.CLOSED
+        if cls.state == new_state:
+            return
+        cls.set_attributes('value', new_state.value)
+
+    def set_attributes(cls, name, value):
+        logger.debug(f'set_attributes {name}, {value}')
+        cls._entity.value = value
+        cls.value = value
+        logger.debug({'value': cls._entity.value})
+        super().set_attributes(attributes={'value': cls._entity.value})
+        cls._send_action(state=cls.value)
+
+    def _send_action(cls, state:str) -> None:
+        logger.info(f'Sending {state} command to {cls._entity.name} using {cls.state_topic}')
+        super()._state_helper(state=state);
+
+    def cover_contact_callback(cls, opened_contact:bool):
+        contact = cls.opened_contact if opened_contact else cls.closed_contact
+        contact.input()
+        logger.debug(f'contact state: {contact.value}')
+        cls.post_value_if_changed()
 
     @staticmethod
     def opened_contact_callback(pin:int):
-        contact = contacts[pin]
+        cover, contact = contacts[pin]
         logger.debug(f'opened contact pulsed: {contact}')
-        state = contact.input()
-        logger.debug(f'state: {state}')
+        cover.cover_contact_callback(True)
 
     @staticmethod
     def closed_contact_callback(pin:int):
-        contact = contacts[pin]
+        cover, contact = contacts[pin]
         logger.debug(f'closed contact pulsed: {contact}')
-        state = contact.input()
-        logger.debug(f'state: {state}')
+        cover.cover_contact_callback(False)
 
     @staticmethod
-    def cover_callback(client: Client, user_data, message: MQTTMessage):
+    def cover_button_callback(client: Client, user_data, message: MQTTMessage):
         cover_payload = message.payload.decode()
         logging.info(f"Received {cover_payload} from HA with {user_data}")
         user_data.pushButtonFor()
