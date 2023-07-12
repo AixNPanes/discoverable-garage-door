@@ -12,6 +12,7 @@ from ha_mqtt_discoverable import (
     Settings,
 )
 from .config import Config
+from .door import Door
 
 """
 # Example configuration.yaml entry
@@ -87,7 +88,8 @@ class Cover(Subscriber[CoverInfo]):
 
     def cover_callback(client: Client, user_data, message: MQTTMessage):
         cover_payload = message.payload.decode()
-        logging.info(f"Received {cover_payload} from HA")
+        logging.info(f"Received {cover_payload} from HA with {user_data}")
+        user_data.pushButton()
 
     @staticmethod
     def cover(
@@ -95,6 +97,12 @@ class Cover(Subscriber[CoverInfo]):
     ) -> Cover:
         cover_info = CoverInfo(name=door_config.name, device_class="garage")
         cover_settings = Settings(mqtt=mqtt, entity=cover_info)
-        cover = Cover(cover_settings, command_callback=Cover.cover_callback)
+        door = Door(gpio_config.button_push_duration_ms, \
+                gpio_config.contact_pullup, \
+                door_config)
+        cover = Cover( \
+                cover_settings, \
+                command_callback=Cover.cover_callback, \
+                user_data=door)
         cover.open()
         return cover

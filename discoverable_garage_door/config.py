@@ -26,7 +26,7 @@ class DoorInfo(BaseModel):
     closed_contact_pin: int = 17
 
 
-class GPIO(BaseModel):
+class GpioInfo(BaseModel):
     button_push_duration_ms: int = 500
     contact_bounce_time_ms: int = 200
     contact_pullup: bool = True
@@ -35,7 +35,7 @@ class GPIO(BaseModel):
 
 class Config(YamlModel):
     mqtt_broker: MQTT = MQTT()
-    gpio: GPIO = GPIO()
+    gpio: GpioInfo = GpioInfo()
 
     @staticmethod
     def _readfile(filepath) -> Config:
