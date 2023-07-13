@@ -124,7 +124,7 @@ class Cover(Subscriber[CoverInfo]):
         raise Error()
 
     def cleanup(cls):
-        button.cleanup()
+        cls.button.cleanup()
         cls.opened_contact.cleanup()
         cls.closed_contact.cleanup()
 

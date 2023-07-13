@@ -27,5 +27,5 @@ try:
     signal.pause()
 except KeyboardInterrupt:
     print("\nStopping ...")
-    for door in config.gpio.doors:
+    for door in doors:
         door.cleanup()
